@@ -1,6 +1,6 @@
-import { posts } from '@/data/posts';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
+import { prisma } from '@/lib/prisma';
 
 // Correct type for Next.js 15+ params (they are promises in some versions, but standard in 14)
 // Assuming Next.js 14/15 standard usage.
@@ -10,21 +10,21 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const { slug } = await Promise.resolve(params); // Handle potential promise
-    const post = posts.find(p => p.slug === slug);
+    const post = await prisma.post.findUnique({ where: { slug } });
     if (!post) return { title: 'Post Not Found' };
     return { title: `${post.title} | Personal Website` };
 }
 
 export default async function BlogPostPage({ params }: Props) {
     const { slug } = await Promise.resolve(params); // Handle potential promise
-    const post = posts.find(p => p.slug === slug);
+    const post = await prisma.post.findUnique({ where: { slug } });
 
     if (!post) {
         notFound();
     }
 
     return (
-        <article className="section" style={{ maxWidth: '800px', margin: '0 auto' }}>
+        <article className="section container" style={{ maxWidth: '800px', margin: '0 auto' }}>
             <header style={{ marginBottom: '3rem', textAlign: 'center' }}>
                 <h1 style={{ fontSize: '3rem', marginBottom: '1rem', lineHeight: 1.1 }}>{post.title}</h1>
                 <p style={{ color: 'var(--foreground-muted)' }}>

@@ -1,15 +1,21 @@
 import Link from 'next/link';
-import { posts } from '@/data/posts';
 import { Metadata } from 'next';
+import { prisma } from '@/lib/prisma';
 
 export const metadata: Metadata = {
     title: 'Blog | Personal Website',
     description: 'Thoughts on technology, design, and creativity.',
 };
 
-export default function BlogPage() {
+export const dynamic = 'force-dynamic';
+
+export default async function BlogPage() {
+    const posts = await prisma.post.findMany({
+        orderBy: { date: 'desc' },
+    });
+
     return (
-        <div className="section">
+        <div className="section container">
             <h1 className="text-center">Blog</h1>
             <div style={{ maxWidth: '800px', margin: '0 auto' }}>
                 {posts.map(post => (

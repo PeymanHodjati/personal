@@ -1,15 +1,28 @@
 'use client';
 
 import { useState } from 'react';
-import { projects, ProjectCategory } from '@/data/projects';
 import styles from './PortfolioGrid.module.css';
 
-export default function PortfolioGrid() {
+type ProjectCategory = 'video' | 'photo' | 'virtual-tour';
+
+interface Project {
+    id: string;
+    title: string;
+    description: string;
+    category: string;
+    thumbnail: string;
+}
+
+interface PortfolioGridProps {
+    initialProjects: Project[];
+}
+
+export default function PortfolioGrid({ initialProjects }: PortfolioGridProps) {
     const [filter, setFilter] = useState<ProjectCategory | 'all'>('all');
 
     const filteredProjects = filter === 'all'
-        ? projects
-        : projects.filter(p => p.category === filter);
+        ? initialProjects
+        : initialProjects.filter(p => p.category === filter);
 
     const categories: { value: ProjectCategory | 'all', label: string }[] = [
         { value: 'all', label: 'All Work' },
@@ -25,7 +38,7 @@ export default function PortfolioGrid() {
                     <button
                         key={cat.value}
                         className={`${styles.filterBtn} ${filter === cat.value ? styles.active : ''}`}
-                        onClick={() => setFilter(cat.value)}
+                        onClick={() => setFilter(cat.value as ProjectCategory | 'all')}
                     >
                         {cat.label}
                     </button>
