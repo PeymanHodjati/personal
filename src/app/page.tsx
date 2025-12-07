@@ -32,6 +32,7 @@ export default function Home() {
   const lastScrollTimeRef = useRef(0); // Debounce scroll
   const lastFrameTimeRef = useRef(0);  // For delta time calculation
   const navigationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const isMobileRef = useRef(false); // For animation loop access
 
   // Configuration
   const isTransitioningRef = useRef(false);
@@ -72,28 +73,32 @@ export default function Home() {
       currentProgressRef.current = target;
     }
 
-    // --- Video Update (Slower) ---
-    const videoDiff = target - videoProgressRef.current;
-    const videoStep = VIDEO_SPEED_PER_MS * deltaTime;
-    const videoDone = Math.abs(videoDiff) < videoStep;
+    // --- Video Update (Slower) - Skip on mobile, let it autoplay ---
+    if (!isMobileRef.current) {
+      const videoDiff = target - videoProgressRef.current;
+      const videoStep = VIDEO_SPEED_PER_MS * deltaTime;
+      const videoDone = Math.abs(videoDiff) < videoStep;
 
-    if (!videoDone) {
-      const direction = Math.sign(videoDiff);
-      videoProgressRef.current += direction * videoStep;
+      if (!videoDone) {
+        const direction = Math.sign(videoDiff);
+        videoProgressRef.current += direction * videoStep;
 
-      // Apply to Video
-      if (videoRef.current && videoRef.current.duration) {
-        const videoTime = (videoProgressRef.current / 100) * videoRef.current.duration;
-        if (Number.isFinite(videoTime)) {
-          videoRef.current.currentTime = videoTime;
+        // Apply to Video
+        if (videoRef.current && videoRef.current.duration) {
+          const videoTime = (videoProgressRef.current / 100) * videoRef.current.duration;
+          if (Number.isFinite(videoTime)) {
+            videoRef.current.currentTime = videoTime;
+          }
         }
+      } else {
+        videoProgressRef.current = target;
       }
-    } else {
-      videoProgressRef.current = target;
     }
 
     // --- Check for Completion ---
-    if (uiDone && videoDone) {
+    // On mobile, video runs independently so consider it always "done"
+    const videoComplete = isMobileRef.current || videoProgressRef.current === target;
+    if (uiDone && videoComplete) {
       if (isTransitioningRef.current) {
         isTransitioningRef.current = false;
         lastScrollTimeRef.current = Date.now();
@@ -110,6 +115,7 @@ export default function Home() {
     // Detect mobile via touch capability
     const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
     setIsMobile(isTouchDevice);
+    isMobileRef.current = isTouchDevice;
 
     // Check if video is already ready (cached)
     if (videoRef.current && videoRef.current.readyState >= 3) {
@@ -266,16 +272,28 @@ export default function Home() {
           <button
             className={styles.enterButton}
             onClick={() => {
-              // Unlock video on mobile
+              // Unlock and autoplay video on mobile
               if (videoRef.current) {
                 hasInteractedRef.current = true;
-                videoRef.current.load();
-                videoRef.current.play().then(() => {
-                  videoRef.current?.pause();
+                const video = videoRef.current;
+
+                // Wait for metadata to load, then start playing
+                const startVideo = () => {
+                  video.currentTime = video.duration * 0.5; // Start at middle (Home section)
+                  video.play().catch(() => { });
                   setIsLoading(false);
-                }).catch(() => {
-                  setIsLoading(false);
-                });
+                };
+
+                if (video.readyState >= 1) {
+                  // Metadata already loaded
+                  startVideo();
+                } else {
+                  // Wait for metadata
+                  video.load();
+                  video.addEventListener('loadedmetadata', startVideo, { once: true });
+                  // Fallback timeout
+                  setTimeout(() => setIsLoading(false), 3000);
+                }
               } else {
                 setIsLoading(false);
               }
@@ -297,9 +315,12 @@ export default function Home() {
         className={styles.videoBackground}
         src="https://pub-a0f9c91ac679465bb3e90eb766fb247a.r2.dev/Home/personalsitevid.mp4"
         muted
+        loop
         playsInline
         preload="auto"
-        onCanPlayThrough={() => setIsLoading(false)}
+        onCanPlayThrough={() => {
+          if (!isMobile) setIsLoading(false);
+        }}
       />
 
       {/* Side Menu */}
