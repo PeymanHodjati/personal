@@ -181,10 +181,11 @@
     display: flex;
     flex-direction: column;
     z-index: 10;
+    overflow-y: auto;
 }
 
 .backButton {
-    position: absolute;
+    position: fixed;
     top: 2.5rem;
     left: 2.5rem;
     display: flex;
@@ -218,16 +219,16 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     text-align: center;
-    padding: 4rem;
+    padding: 6rem 4rem 4rem;
 }
 
 .expandedInfo h1 {
     font-family: var(--font-limelight), serif;
-    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-size: clamp(2rem, 5vw, 3rem);
     font-weight: 400;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
     letter-spacing: 0.02em;
 }
 
@@ -236,6 +237,126 @@
     color: rgba(255, 255, 255, 0.45);
     max-width: 500px;
     line-height: 1.7;
+}
+
+/* ============================================
+   GALLERY LAYOUT - Two Rows
+   ============================================ */
+
+.galleryContainer {
+    width: 100%;
+    max-width: 1400px;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    padding: 1rem 0;
+}
+
+.galleryRow {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.rowLabel {
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: rgba(255, 255, 255, 0.4);
+    text-align: left;
+    padding-left: 0.5rem;
+}
+
+.galleryGrid {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.galleryItem {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    background: #111;
+    transition: all 0.3s ease;
+}
+
+.galleryItem:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+}
+
+.galleryImage,
+.galleryVideo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.playOverlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.3);
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.galleryItem:hover .playOverlay {
+    opacity: 0;
+}
+
+/* ============================================
+   FULLSCREEN VIEWER
+   ============================================ */
+
+.fullscreenOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.fullscreenClose {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #fff;
+    transition: all 0.3s ease;
+    z-index: 101;
+}
+
+.fullscreenClose:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.fullscreenMedia {
+    max-width: 90vw;
+    max-height: 90vh;
+    object-fit: contain;
+    border-radius: 8px;
+    cursor: default;
 }
 
 /* ============================================
@@ -252,6 +373,11 @@
     .navItem {
         font-size: 1.25rem;
         padding: 1rem 1.25rem;
+    }
+
+    .galleryItem {
+        width: 160px;
+        height: 160px;
     }
 }
 
@@ -292,6 +418,15 @@
     .navItemActive {
         padding-left: 1.5rem;
     }
+
+    .expandedInfo {
+        padding: 5rem 2rem 2rem;
+    }
+
+    .galleryItem {
+        width: 140px;
+        height: 140px;
+    }
 }
 
 @media (max-width: 600px) {
@@ -307,5 +442,339 @@
     .navItem {
         font-size: 1.05rem;
         padding: 0.8rem 1rem;
+    }
+
+    .galleryItem {
+        width: 100px;
+        height: 100px;
+        border-radius: 8px;
+    }
+
+    .fullscreenClose {
+        width: 40px;
+        height: 40px;
+        top: 1rem;
+        right: 1rem;
+    }
+}
+
+/* ============================================
+   VIDEO THUMBNAIL & NAVIGATION ARROWS
+   ============================================ */
+
+/* Video Thumbnail (static placeholder) */
+.videoThumbnail {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Navigation Arrows */
+.navArrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #fff;
+    transition: all 0.3s ease;
+    z-index: 101;
+}
+
+.navArrow:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.navArrowLeft {
+    left: 2rem;
+}
+
+.navArrowRight {
+    right: 2rem;
+}
+
+/* Fullscreen Counter */
+.fullscreenCounter {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.6);
+    letter-spacing: 0.1em;
+    z-index: 101;
+}
+
+/* Mosaic Grid - Pinterest/Masonry style */
+.mosaicGrid {
+    column-count: 4;
+    column-gap: 1rem;
+    width: 100%;
+}
+
+.mosaicItem {
+    position: relative;
+    break-inside: avoid;
+    margin-bottom: 1rem;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    background: #111;
+    transition: all 0.3s ease;
+}
+
+.mosaicItem:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.15);
+}
+
+.mosaicItem img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+}
+
+@media (max-width: 1024px) {
+    .mosaicGrid {
+        column-count: 3;
+    }
+}
+
+@media (max-width: 768px) {
+    .mosaicGrid {
+        column-count: 2;
+    }
+}
+
+/* Videography - Vertical Video Showcase */
+.videoShowcase {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.verticalVideoItem {
+    position: relative;
+    width: 280px;
+    height: 500px;
+    border-radius: 16px;
+    overflow: hidden;
+    cursor: pointer;
+    background: #111;
+    transition: all 0.3s ease;
+}
+
+.verticalVideoItem:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 40px rgba(255, 255, 255, 0.15);
+}
+
+.verticalVideoPreview {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.fullscreenVideo {
+    max-width: 90vw;
+    max-height: 90vh;
+    object-fit: contain;
+    border-radius: 8px;
+    cursor: default;
+}
+
+@media (max-width: 900px) {
+    .verticalVideoItem {
+        width: 220px;
+        height: 400px;
+    }
+}
+
+@media (max-width: 600px) {
+    .verticalVideoItem {
+        width: 160px;
+        height: 280px;
+        border-radius: 12px;
+    }
+}
+
+/* Project Highlights - Project Cards */
+.projectGrid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: center;
+}
+
+.projectCard {
+    width: 300px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.projectCard:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.projectLogo {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.projectName {
+    padding: 1.25rem;
+    font-size: 1.2rem;
+    font-weight: 500;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.projectBackButton {
+    display: inline-block;
+    margin-bottom: 2rem;
+    padding: 0.75rem 1.5rem;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.projectBackButton:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+}
+
+@media (max-width: 768px) {
+    .projectCard {
+        width: 250px;
+    }
+
+    .projectLogo {
+        height: 160px;
+    }
+}
+
+/* Project Detail View - Hero + Supporting Images */
+.projectDetail {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.projectHero {
+    width: 70%;
+    margin: 0 auto 2rem auto;
+    border-radius: 16px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.projectHero:hover {
+    transform: scale(1.01);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+.projectHeroImage {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.projectSupportingImages {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.supportingImageItem {
+    width: calc(25% - 0.75rem);
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.supportingImageItem:hover {
+    transform: scale(1.03);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.supportingImageItem img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .supportingImageItem {
+        width: calc(50% - 0.5rem);
+    }
+}
+
+@media (max-width: 480px) {
+    .projectSupportingImages {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Multiple Hero Items Container */
+.projectHeroContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.projectHeroContainer .projectHero {
+    width: 70%;
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .projectHeroContainer .projectHero {
+        width: 100%;
+    }
+}
+/* Side by side hero layout for square items */
+.heroSideBySide {
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.heroSideBySide .projectHero {
+    width: calc(50% - 0.75rem);
+    flex: none;
+}
+
+@media (max-width: 768px) {
+    .heroSideBySide .projectHero {
+        width: 100%;
     }
 }
