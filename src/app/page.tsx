@@ -15,6 +15,8 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [isDragging, setIsDragging] = useState(false);
   const [copiedEmail, setCopiedEmail] = useState<string | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
+  const [showEnterButton, setShowEnterButton] = useState(false);
 
   const handleCopy = (email: string) => {
     navigator.clipboard.writeText(email);
@@ -105,15 +107,25 @@ export default function Home() {
   useEffect(() => {
     requestRef.current = requestAnimationFrame(animate);
 
+    // Detect mobile via touch capability
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    setIsMobile(isTouchDevice);
+
     // Check if video is already ready (cached)
     if (videoRef.current && videoRef.current.readyState >= 3) {
-      setIsLoading(false);
+      if (!isTouchDevice) {
+        setIsLoading(false);
+      }
     }
 
-    // Fallback timeout in case video event never fires
+    // Fallback timeout - on mobile show enter button, on desktop hide loader
     const timeout = setTimeout(() => {
-      setIsLoading(false);
-    }, 3000);
+      if (isTouchDevice) {
+        setShowEnterButton(true);
+      } else {
+        setIsLoading(false);
+      }
+    }, 2000);
 
     return () => {
       if (requestRef.current) cancelAnimationFrame(requestRef.current);
@@ -199,9 +211,20 @@ export default function Home() {
 
   // Touch Logic (Swipe)
   const touchStartRef = useRef<number | null>(null);
+  const hasInteractedRef = useRef(false);
 
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartRef.current = e.touches[0].clientY;
+
+    // Unlock video on first touch for mobile browsers
+    if (!hasInteractedRef.current && videoRef.current) {
+      hasInteractedRef.current = true;
+      videoRef.current.load();
+      // Brief play/pause to unlock the video for scrubbing
+      videoRef.current.play().then(() => {
+        videoRef.current?.pause();
+      }).catch(() => { });
+    }
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
@@ -239,8 +262,33 @@ export default function Home() {
     >
       {/* Loading Screen */}
       <div className={`${styles.loader} ${!isLoading ? styles.hidden : ''}`}>
-        <div className={styles.spinner}></div>
-        <p style={{ letterSpacing: '0.2em', textTransform: 'uppercase', fontSize: '0.8rem' }}>Starting up</p>
+        {showEnterButton && isMobile ? (
+          <button
+            className={styles.enterButton}
+            onClick={() => {
+              // Unlock video on mobile
+              if (videoRef.current) {
+                hasInteractedRef.current = true;
+                videoRef.current.load();
+                videoRef.current.play().then(() => {
+                  videoRef.current?.pause();
+                  setIsLoading(false);
+                }).catch(() => {
+                  setIsLoading(false);
+                });
+              } else {
+                setIsLoading(false);
+              }
+            }}
+          >
+            Enter Site
+          </button>
+        ) : (
+          <>
+            <div className={styles.spinner}></div>
+            <p style={{ letterSpacing: '0.2em', textTransform: 'uppercase', fontSize: '0.8rem' }}>Starting up</p>
+          </>
+        )}
       </div>
 
       {/* Background Video */}
