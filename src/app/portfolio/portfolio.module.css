@@ -124,7 +124,7 @@
     cursor: pointer;
     text-align: left;
     font-family: var(--font-limelight), serif;
-    font-size: 1.4rem;
+    font-size: 1.68rem;
     font-weight: 400;
     color: rgba(255, 255, 255, 0.35);
     letter-spacing: 0.02em;
@@ -398,11 +398,12 @@
     .rightNav {
         width: 100%;
         height: 45%;
-        padding: 2rem;
+        padding: 1rem 2rem 2rem;
         border-left: none;
         border-top: 1px solid rgba(255, 255, 255, 0.06);
         overflow-y: auto;
         align-items: center;
+        justify-content: flex-start;
     }
 
     .navList {
