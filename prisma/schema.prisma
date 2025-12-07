@@ -11,7 +11,9 @@ model Project {
   id          String   @id @default(cuid())
   title       String
   description String
-  category    String   // 'video', 'photo', 'virtual-tour'
+  category    String   // 'virtual-tour', 'videography', 'photography', 'graphics', 'web-design'
+  type        String   @default("personal") // 'commercial', 'personal'
+  layout      String   @default("standard") // 'gallery', 'video', 'featured', 'standard'
   thumbnail   String
   mediaUrl    String?
   date        DateTime

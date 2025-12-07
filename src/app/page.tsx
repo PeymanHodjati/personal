@@ -26,20 +26,14 @@ export default function Home() {
   const targetProgressRef = useRef(0);
   const currentProgressRef = useRef(0); // Tracks UI/Lock progress
   const videoProgressRef = useRef(0);   // Tracks Video progress
-  const requestRef = useRef<number>(null);
+  const requestRef = useRef<number | null>(null);
   const lastScrollTimeRef = useRef(0); // Debounce scroll
   const lastFrameTimeRef = useRef(0);  // For delta time calculation
   const navigationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Configuration
   const isTransitioningRef = useRef(false);
-
-  // Configuration
-  // Configuration
   const SECTIONS = ['Portfolio', 'Home', 'Contact'];
-  // Speed in units per millisecond (to match deltaTime)
-  // Previous: 0.025 -> +25% = 0.03125
-  // Previous: 0.006 -> +25% = 0.0075
   const UI_SPEED_PER_MS = 0.03125;
   const VIDEO_SPEED_PER_MS = 0.0075;
 
@@ -50,7 +44,7 @@ export default function Home() {
     return 100;                         // Contact (End)
   };
 
-  // Animation Loop
+  // Animation Loop - runs continuously
   const animate = (time: number) => {
     if (lastFrameTimeRef.current === 0) {
       lastFrameTimeRef.current = time;
@@ -104,6 +98,7 @@ export default function Home() {
       }
     }
 
+    // Always continue the animation loop
     requestRef.current = requestAnimationFrame(animate);
   };
 
@@ -211,7 +206,6 @@ export default function Home() {
 
   const handleTouchMove = (e: React.TouchEvent) => {
     // Prevent default to avoid scrolling the body (if needed)
-    // e.preventDefault(); 
   };
 
   const handleTouchEnd = (e: React.TouchEvent) => {

@@ -48,14 +48,15 @@
 }
 
 .menuItem {
+    font-family: var(--font-limelight), serif;
     font-size: 4rem;
-    font-weight: 900;
+    font-weight: 400;
     color: rgba(255, 255, 255, 0.2);
     cursor: default;
     /* Default to not clickable */
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     text-transform: uppercase;
-    letter-spacing: -0.04em;
+    letter-spacing: 0.02em;
     line-height: 1;
     background: transparent;
     border: none;
