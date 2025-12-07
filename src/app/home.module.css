@@ -259,6 +259,10 @@
 
 /* Mobile Optimization */
 @media (max-width: 768px) {
+    .videoBackground {
+        object-position: 75% center;
+    }
+
     .sideMenu {
         right: 5vw;
         gap: 1rem;
