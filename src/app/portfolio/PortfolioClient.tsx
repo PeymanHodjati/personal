@@ -43,7 +43,7 @@ const CATEGORIES = [
     },
 ];
 
-const ASSET_BASE_URL = 'https://pub-a0f9c91ac679465bb3e90eb766fb247a.r2.dev/Home/portfolio/portfolio-previews/';
+const ASSET_BASE_URL = 'https://assets.peymanhodjati.com/Home/portfolio/portfolio-previews/';
 
 // Graphic & Motion content - combined list for navigation
 const GRAPHIC_MOTION_ITEMS = [
@@ -61,7 +61,7 @@ const GRAPHIC_MOTION_ITEMS = [
     { type: 'video' as const, src: 'motion5.mp4', poster: 'motion5-poster.png', title: 'Motion Graphics 5' },
 ];
 
-const GRAPHIC_BASE_URL = 'https://pub-a0f9c91ac679465bb3e90eb766fb247a.r2.dev/Home/portfolio/graphic/';
+const GRAPHIC_BASE_URL = 'https://assets.peymanhodjati.com/Home/portfolio/graphic/';
 
 // Photography content - all images for fullscreen navigation
 const PHOTOGRAPHY_ITEMS = [
@@ -94,7 +94,7 @@ const PHOTOGRAPHY_ITEMS = [
     { src: 'studio (6).jpg', title: 'Studio 5', category: 'studio' },
 ];
 
-const PHOTOGRAPHY_BASE_URL = 'https://pub-a0f9c91ac679465bb3e90eb766fb247a.r2.dev/Home/portfolio/photo/';
+const PHOTOGRAPHY_BASE_URL = 'https://assets.peymanhodjati.com/Home/portfolio/photo/';
 
 // Videography content - vertical videos
 const VIDEOGRAPHY_ITEMS = [
@@ -103,7 +103,7 @@ const VIDEOGRAPHY_ITEMS = [
     { src: 'vertical.mp4', title: 'Vertical' },
 ];
 
-const VIDEOGRAPHY_BASE_URL = 'https://pub-a0f9c91ac679465bb3e90eb766fb247a.r2.dev/Home/portfolio/video/';
+const VIDEOGRAPHY_BASE_URL = 'https://assets.peymanhodjati.com/Home/portfolio/video/';
 
 // Project Highlights - organized by project
 const PROJECT_HIGHLIGHTS = [
@@ -174,7 +174,7 @@ const PROJECT_HIGHLIGHTS = [
     },
 ];
 
-const HIGHLIGHTS_BASE_URL = 'https://pub-a0f9c91ac679465bb3e90eb766fb247a.r2.dev/Home/portfolio/highlights/';
+const HIGHLIGHTS_BASE_URL = 'https://assets.peymanhodjati.com/Home/portfolio/highlights/';
 
 export default function PortfolioClient() {
     const [activeCategory, setActiveCategory] = useState<number | null>(null);
@@ -240,7 +240,7 @@ export default function PortfolioClient() {
     };
 
     // Virtual Tour URL
-    const VIRTUAL_TOUR_URL = 'https://pub-a0f9c91ac679465bb3e90eb766fb247a.r2.dev/Home/portfolio/360/isatis/index.html';
+    const VIRTUAL_TOUR_URL = 'https://assets.peymanhodjati.com/Home/portfolio/360/isatis/index.html';
 
     // Handle category click (expand to full screen or open virtual tour)
     const handleCategoryClick = (categoryId: number) => {

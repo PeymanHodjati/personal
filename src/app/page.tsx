@@ -313,7 +313,7 @@ export default function Home() {
       <video
         ref={videoRef}
         className={styles.videoBackground}
-        src="https://pub-a0f9c91ac679465bb3e90eb766fb247a.r2.dev/Home/personalsitevid.mp4"
+        src="https://assets.peymanhodjati.com/Home/personalsitevid.mp4"
         muted
         loop
         playsInline
