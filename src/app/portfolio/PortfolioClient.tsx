@@ -239,8 +239,16 @@ export default function PortfolioClient() {
         setActiveCategory(null);
     };
 
-    // Handle category click (expand to full screen)
+    // Virtual Tour URL
+    const VIRTUAL_TOUR_URL = 'https://pub-a0f9c91ac679465bb3e90eb766fb247a.r2.dev/Home/portfolio/360/isatis/index.html';
+
+    // Handle category click (expand to full screen or open virtual tour)
     const handleCategoryClick = (categoryId: number) => {
+        // Virtual Tour (id: 2) opens directly in new tab
+        if (categoryId === 2) {
+            window.open(VIRTUAL_TOUR_URL, '_blank');
+            return;
+        }
         setExpandedCategory(categoryId);
     };
 
