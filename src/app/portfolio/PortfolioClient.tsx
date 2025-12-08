@@ -176,6 +176,39 @@ const PROJECT_HIGHLIGHTS = [
 
 const HIGHLIGHTS_BASE_URL = 'https://assets.peymanhodjati.com/Home/portfolio/highlights/';
 
+// Web Development - Websites and videos
+const WEB_DEV_PROJECTS = [
+    {
+        id: 'bean-joy',
+        name: 'Bean & Joy',
+        url: 'https://bean-and-joy.com/',
+        description: 'Static Commercial Site',
+    },
+    {
+        id: 'asanend',
+        name: 'Asanend',
+        url: 'https://www.asanend.com/',
+        description: 'Community Webapp',
+        thumbnail: 'asanend-thumbnail.jpg',
+    },
+    {
+        id: 'edirect',
+        name: 'EDirect',
+        url: 'https://www.edirect.cc/',
+        description: 'B2B PWA',
+        thumbnail: 'edirect-thumbnail.jpg',
+    },
+    {
+        id: 'personal',
+        name: 'This Site',
+        url: 'https://www.peymanhodjati.com/',
+        description: 'Personal Portfolio',
+    },
+];
+
+const WEB_DEV_BASE_URL = 'https://assets.peymanhodjati.com/Home/portfolio/webdev/';
+const WEB_DEV_YOUTUBE_PLAYLIST = 'https://www.youtube.com/embed/videoseries?list=PLbZ0JabB5w8f-g73Qa-J6W-mKcfXt9-Ky';
+
 export default function PortfolioClient() {
     const [activeCategory, setActiveCategory] = useState<number | null>(null);
     const [expandedCategory, setExpandedCategory] = useState<number | null>(null);
@@ -471,6 +504,62 @@ export default function PortfolioClient() {
         </div>
     );
 
+    // Render Web Development content - Website cards + YouTube playlist
+    const renderWebDevContent = () => (
+        <div className={styles.galleryContainer}>
+            {/* Website Cards */}
+            <div className={styles.webDevGrid}>
+                {WEB_DEV_PROJECTS.map((project) => (
+                    <div key={project.id} className={styles.webDevCard}>
+                        <div className={styles.webDevPreview}>
+                            {'thumbnail' in project && project.thumbnail ? (
+                                <img
+                                    src={`${WEB_DEV_BASE_URL}${project.thumbnail}`}
+                                    alt={project.name}
+                                    className={styles.webDevThumbnail}
+                                />
+                            ) : (
+                                <iframe
+                                    src={project.url}
+                                    title={project.name}
+                                    className={styles.webDevIframe}
+                                    loading="lazy"
+                                />
+                            )}
+                            <div className={styles.webDevOverlay} />
+                        </div>
+                        <div className={styles.webDevInfo}>
+                            <h3 className={styles.webDevName}>{project.name}</h3>
+                            <p className={styles.webDevDescription}>{project.description}</p>
+                            <a
+                                href={project.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className={styles.webDevVisitButton}
+                            >
+                                Visit Site →
+                            </a>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            {/* YouTube Playlist */}
+            <div className={styles.webDevVideoSection}>
+                <h2 className={styles.webDevVideoTitle}>Walkthrough Videos</h2>
+                <div className={styles.webDevVideoContainer}>
+                    <iframe
+                        src={WEB_DEV_YOUTUBE_PLAYLIST}
+                        title="Web Development Walkthroughs"
+                        className={styles.webDevYoutube}
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                    />
+                </div>
+            </div>
+        </div>
+    );
+
     // Get current gallery items based on expanded category
     const getCurrentGalleryItems = () => {
         if (expandedCategory === 0) return VIDEOGRAPHY_ITEMS;
@@ -550,6 +639,8 @@ export default function PortfolioClient() {
                                 renderPhotographyContent()
                             ) : expandedCategory === 3 ? (
                                 renderGraphicMotionContent()
+                            ) : expandedCategory === 4 ? (
+                                renderWebDevContent()
                             ) : expandedCategory === 5 ? (
                                 renderProjectHighlightsContent()
                             ) : (
