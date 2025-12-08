@@ -318,6 +318,13 @@ export default function Home() {
         loop
         playsInline
         preload="auto"
+        onLoadedMetadata={() => {
+          // Set initial position to Home (50%) on desktop
+          if (videoRef.current && !isMobile) {
+            videoRef.current.currentTime = videoRef.current.duration * 0.5;
+            videoProgressRef.current = 50;
+          }
+        }}
         onCanPlayThrough={() => {
           if (!isMobile) setIsLoading(false);
         }}
