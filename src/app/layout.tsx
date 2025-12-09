@@ -72,19 +72,37 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    name: "Peyman Hodjati",
-    url: "https://peymanhodjati.com",
-    image: "https://peymanhodjati.com/og-image.jpg",
-    jobTitle: "Creative Professional",
-    description: "Videographer, Photographer, Web Developer, and Graphic Designer based in Cyprus",
-    sameAs: [
-      "https://www.linkedin.com/in/peymanhodjati",
-    ],
-    knowsAbout: ["Videography", "Photography", "Virtual Tours", "Graphic Design", "Motion Graphics", "Web Development"],
-  };
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      name: "Peyman Hodjati",
+      url: "https://peymanhodjati.com",
+      image: "https://peymanhodjati.com/og-image.jpg",
+      jobTitle: "Creative Professional",
+      description: "Videographer, Photographer, Web Developer, and Graphic Designer based in Cyprus",
+      sameAs: [
+        "https://www.linkedin.com/in/peymanhodjati",
+      ],
+      knowsAbout: ["Videography", "Photography", "Virtual Tours", "Graphic Design", "Motion Graphics", "Web Development"],
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "VideoObject",
+      name: "Peyman Hodjati - Creative Portfolio Showcase",
+      description: "An immersive visual journey through Peyman Hodjati's creative work, featuring videography, photography, virtual tours, graphic design, motion graphics, and web development projects.",
+      thumbnailUrl: "https://assets.peymanhodjati.com/Home/personalsitevid-thumbnail.jpg",
+      uploadDate: "2025-12-09T00:00:00Z",
+      duration: "PT30S",
+      contentUrl: "https://assets.peymanhodjati.com/Home/personalsitevid.mp4",
+      embedUrl: "https://peymanhodjati.com",
+      publisher: {
+        "@type": "Person",
+        name: "Peyman Hodjati",
+        url: "https://peymanhodjati.com"
+      }
+    }
+  ];
 
   return (
     <html lang="en" suppressHydrationWarning>
