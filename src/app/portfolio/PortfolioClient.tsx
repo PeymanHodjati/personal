@@ -109,7 +109,7 @@ const VIDEOGRAPHY_BASE_URL = 'https://assets.peymanhodjati.com/Home/portfolio/vi
 const PROJECT_HIGHLIGHTS = [
     {
         id: 'bicommunal',
-        name: 'Bicommunal Choir for Peace-Lena Melanidou logo',
+        name: 'Bicommunal Choir for Peace-Lena Melanidou',
         thumbnail: 'bicommunal-logo.jpg',
         heroItems: [
             { type: 'image' as const, src: 'bicommunal-logo.jpg', title: 'Bicommunal Logo' },
@@ -119,10 +119,14 @@ const PROJECT_HIGHLIGHTS = [
             { src: 'bicommunal (2).jpg', title: 'Bicommunal 2' },
             { src: 'bicommunal (3).jpg', title: 'Bicommunal 3' },
         ],
+        credits: {
+            role: 'Graphic Design',
+            photoCredit: 'Photos courtesy of Bicommunal Choir for Peace-Lena Melanidou',
+        },
     },
     {
         id: 'eulogy',
-        name: 'Eulogy (short film)',
+        name: 'Eulogy (Short Film)',
         thumbnail: 'EULOGY_STILL (4).jpg',
         heroItems: [
             { type: 'image' as const, src: 'EULOGY_STILL (4).jpg', title: 'Eulogy Still' },
@@ -134,10 +138,15 @@ const PROJECT_HIGHLIGHTS = [
             { src: 'EULOGY_STILL (3).JPG', title: 'Eulogy Still 3' },
             { src: 'EULOGY_STILL (5).JPG', title: 'Eulogy Still 5' },
         ],
+        credits: {
+            role: 'Writer & Director',
+            year: '2019 – 2022',
+            awards: 'Gold Prize (Experimental) at Festival Mundial de Cine de Veracruz (2022); Official Selection: Woodbury Film Festival (2019)',
+        },
     },
     {
         id: 'emu-graduation',
-        name: 'EMU graduation ceremonies concept design',
+        name: 'EMU Graduation Ceremony Theme',
         thumbnail: 'emugrad-logo.jpg',
         heroLayout: 'side-by-side' as const,
         heroItems: [
@@ -150,10 +159,34 @@ const PROJECT_HIGHLIGHTS = [
             { src: 'emugrad (3).jpg', title: 'EMU Graduation 3' },
             { src: 'emugrad (4).jpg', title: 'EMU Graduation 4' },
         ],
+        credits: {
+            role: 'Graphic Design',
+            year: '2022',
+            description: 'Produced the "Global Roots" visual concept for the Eastern Mediterranean University 2021-2022 graduation ceremonies.',
+            photoCredit: 'Photos courtesy of Eastern Mediterranean University',
+        },
+    },
+    {
+        id: 'openstage',
+        name: 'OpenStage Cyprus Arts Festival',
+        thumbnail: 'openstage-thumb.jpg',
+        heroLayout: 'videos' as const,
+        youtubeVideos: [
+            'Yzg_jR7XG3A',
+            'lTvh7GEoujc',
+            'jgAHYSdkJGI',
+        ],
+        heroItems: [],
+        supportingImages: [],
+        credits: {
+            role: 'Organising Member, Technical Lead, Production',
+            year: '2023',
+            description: 'Served on the core organising team, directing promotional content, documenting live events, and collaborating with artists to design stage lighting and performance environments.',
+        },
     },
     {
         id: 'varosha',
-        name: 'The Varosha business signage archive',
+        name: 'The Varosha Business Signage Archive',
         thumbnail: 'Varosha (1).jpg',
         heroLayout: 'album' as const,
         heroItems: [],
@@ -171,6 +204,16 @@ const PROJECT_HIGHLIGHTS = [
             { src: 'Varosha (11).jpg', title: 'Varosha 11' },
             { src: 'Varosha (12).jpg', title: 'Varosha 12' },
         ],
+    },
+    {
+        id: 'rosesor',
+        name: 'Rosesor.co',
+        subtitle: 'bubble.io MVP for asanend',
+        thumbnail: 'rosesor-thumb.jpg',
+        heroLayout: 'youtube' as const,
+        youtubePlaylist: 'https://www.youtube.com/embed/videoseries?list=PLbZ0JabB5w8f-g73Qa-J6W-mKcfXt9-Ky',
+        heroItems: [],
+        supportingImages: [],
     },
 ];
 
@@ -207,7 +250,6 @@ const WEB_DEV_PROJECTS = [
 ];
 
 const WEB_DEV_BASE_URL = 'https://assets.peymanhodjati.com/Home/portfolio/webdev/';
-const WEB_DEV_YOUTUBE_PLAYLIST = 'https://www.youtube.com/embed/videoseries?list=PLbZ0JabB5w8f-g73Qa-J6W-mKcfXt9-Ky';
 
 export default function PortfolioClient() {
     const [activeCategory, setActiveCategory] = useState<number | null>(null);
@@ -451,8 +493,47 @@ export default function PortfolioClient() {
                         ← Back to Projects
                     </button>
 
-                    {/* Hero Items - Main Images/Videos (skip for album layout) */}
-                    {'heroLayout' in currentProject && currentProject.heroLayout === 'album' ? null : (
+                    {/* Project Title and Subtitle */}
+                    {'subtitle' in currentProject && currentProject.subtitle && (
+                        <p className={styles.projectSubtitle}>{currentProject.subtitle}</p>
+                    )}
+
+                    {/* YouTube Layout - Embedded Playlist */}
+                    {'heroLayout' in currentProject && currentProject.heroLayout === 'youtube' && 'youtubePlaylist' in currentProject && currentProject.youtubePlaylist ? (
+                        <div className={styles.webDevVideoSection}>
+                            <div className={styles.webDevVideoContainer}>
+                                <iframe
+                                    src={currentProject.youtubePlaylist}
+                                    title={currentProject.name}
+                                    className={styles.webDevYoutube}
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen
+                                />
+                            </div>
+                        </div>
+                    ) : null}
+
+                    {/* Multiple YouTube Videos Layout */}
+                    {'heroLayout' in currentProject && currentProject.heroLayout === 'videos' && 'youtubeVideos' in currentProject && currentProject.youtubeVideos ? (
+                        <div className={styles.youtubeVideosGrid}>
+                            {currentProject.youtubeVideos.map((videoId: string, index: number) => (
+                                <div key={index} className={styles.webDevVideoSection}>
+                                    <div className={styles.webDevVideoContainer}>
+                                        <iframe
+                                            src={`https://www.youtube.com/embed/${videoId}`}
+                                            title={`${currentProject.name} Video ${index + 1}`}
+                                            className={styles.webDevYoutube}
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                            allowFullScreen
+                                        />
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    ) : null}
+
+                    {/* Hero Items - Main Images/Videos (skip for album, youtube, and videos layout) */}
+                    {'heroLayout' in currentProject && (currentProject.heroLayout === 'album' || currentProject.heroLayout === 'youtube' || currentProject.heroLayout === 'videos') ? null : (
                         <div className={`${styles.projectHeroContainer} ${'heroLayout' in currentProject && currentProject.heroLayout === 'side-by-side' ? styles.heroSideBySide : ''}`}>
                             {currentProject.heroItems.map((heroItem, index) => (
                                 <div
@@ -484,21 +565,46 @@ export default function PortfolioClient() {
                     )}
 
                     {/* Images - Album layout uses mosaic, others use supporting grid */}
-                    <div className={'heroLayout' in currentProject && currentProject.heroLayout === 'album' ? styles.mosaicGrid : styles.projectSupportingImages}>
-                        {currentProject.supportingImages.map((img, index) => (
-                            <div
-                                key={index}
-                                className={'heroLayout' in currentProject && currentProject.heroLayout === 'album' ? styles.mosaicItem : styles.supportingImageItem}
-                                onClick={() => setFullscreenIndex(currentProject.heroItems.length + index)}
-                            >
-                                <img
-                                    src={`${HIGHLIGHTS_BASE_URL}${currentProject.id}/${img.src}`}
-                                    alt={img.title}
-                                    loading="lazy"
-                                />
-                            </div>
-                        ))}
-                    </div>
+                    {currentProject.supportingImages.length > 0 && (
+                        <div className={'heroLayout' in currentProject && currentProject.heroLayout === 'album' ? styles.mosaicGrid : styles.projectSupportingImages}>
+                            {currentProject.supportingImages.map((img, index) => (
+                                <div
+                                    key={index}
+                                    className={'heroLayout' in currentProject && currentProject.heroLayout === 'album' ? styles.mosaicItem : styles.supportingImageItem}
+                                    onClick={() => setFullscreenIndex(currentProject.heroItems.length + index)}
+                                >
+                                    <img
+                                        src={`${HIGHLIGHTS_BASE_URL}${currentProject.id}/${img.src}`}
+                                        alt={img.title}
+                                        loading="lazy"
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                    {/* Credits Section */}
+                    {'credits' in currentProject && currentProject.credits && (
+                        <div className={styles.projectCredits}>
+                            {'role' in currentProject.credits && currentProject.credits.role && (
+                                <p className={styles.creditRole}>
+                                    {currentProject.credits.role}
+                                    {'year' in currentProject.credits && currentProject.credits.year && (
+                                        <span className={styles.creditYear}> | {currentProject.credits.year}</span>
+                                    )}
+                                </p>
+                            )}
+                            {'awards' in currentProject.credits && currentProject.credits.awards && (
+                                <p className={styles.creditAwards}>🏆 {currentProject.credits.awards}</p>
+                            )}
+                            {'description' in currentProject.credits && currentProject.credits.description && (
+                                <p className={styles.creditDescription}>{currentProject.credits.description}</p>
+                            )}
+                            {'photoCredit' in currentProject.credits && currentProject.credits.photoCredit && (
+                                <p className={styles.creditPhoto}>{currentProject.credits.photoCredit}</p>
+                            )}
+                        </div>
+                    )}
                 </div>
             ) : null}
         </div>
@@ -542,20 +648,6 @@ export default function PortfolioClient() {
                         </div>
                     </div>
                 ))}
-            </div>
-
-            {/* YouTube Playlist */}
-            <div className={styles.webDevVideoSection}>
-                <h2 className={styles.webDevVideoTitle}>Walkthrough Videos</h2>
-                <div className={styles.webDevVideoContainer}>
-                    <iframe
-                        src={WEB_DEV_YOUTUBE_PLAYLIST}
-                        title="Web Development Walkthroughs"
-                        className={styles.webDevYoutube}
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen
-                    />
-                </div>
             </div>
         </div>
     );

@@ -694,6 +694,13 @@
     color: #fff;
 }
 
+.projectSubtitle {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 1.5rem;
+    font-style: italic;
+}
+
 @media (max-width: 768px) {
     .projectCard {
         width: 250px;
@@ -709,6 +716,9 @@
     width: 100%;
     max-width: 1000px;
     margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .projectHero {
@@ -767,6 +777,53 @@
     .projectSupportingImages {
         grid-template-columns: 1fr;
     }
+}
+
+/* Project Credits Section */
+.projectCredits {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    text-align: center;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.creditRole {
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 0.5rem;
+}
+
+.creditYear {
+    color: rgba(255, 255, 255, 0.35);
+    font-weight: 300;
+}
+
+.creditAwards {
+    font-size: 0.8rem;
+    color: rgba(255, 215, 0, 0.7);
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+    font-weight: 300;
+}
+
+.creditDescription {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.4);
+    line-height: 1.5;
+    margin-bottom: 0.5rem;
+    font-weight: 300;
+}
+
+.creditPhoto {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.3);
+    font-style: italic;
+    margin-top: 0.75rem;
+    font-weight: 300;
 }
 
 /* Multiple Hero Items Container */
@@ -964,6 +1021,16 @@
     width: 100%;
     height: 100%;
     border: none;
+}
+
+/* Multiple YouTube Videos Grid */
+.youtubeVideosGrid {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
 }
 
 @media (max-width: 768px) {
